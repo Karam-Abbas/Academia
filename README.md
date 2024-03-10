@@ -1,2 +1,2 @@
 # Academia
-All the academic work is placed here.
+All the academic lab work is placed here.
