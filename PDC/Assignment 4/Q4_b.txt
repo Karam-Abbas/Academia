@@ -1,0 +1,47 @@
+#include <stdlib.h>
+#include <stdio.h>
+int power(int base, int exponent)
+{
+    int result = 1.0;
+    int i;
+    for (i = 0; i < exponent; i++)
+    {
+        result *= base;
+    }
+    return result;
+}
+
+void One_to_all_hypercube(int dimension, int my_id, int source)
+{
+    int virtual_id = my_id ^ source;
+    int mask = power(2, dimension) - 1;
+    int i, msg_dest = 0, msg_src = 0;
+    for (i = dimension - 1; i >= 0; i--)
+    {
+        mask = mask ^ power(2, i);
+        if ((virtual_id & mask) == 0)
+        {
+            if ((virtual_id & power(2, i)) == 0)
+            {
+                msg_dest = virtual_id ^ power(2, i);
+                printf("Msg sent to Node: %d\n", msg_dest ^ source);
+            }
+            else
+            {
+                msg_src = virtual_id ^ power(2, i);
+                printf("Msg received from Node: %d\n", msg_src ^ source);
+            }
+        }
+    }
+}
+
+int main()
+{
+    int i = 0 , source = 0;   // change value of source for diffrent perspectives...
+    for (i = 0; i < 7; i++)
+    {
+        printf("----------Node%d----------\n", i);
+        One_to_all_hypercube(2, i, source);   
+    }
+    return 0;
+}
